@@ -22,7 +22,21 @@ const useStyles = makeStyles((theme) => ({
 
 const FormUserDetails = (props) => {
   const classes = useStyles();
-  const { handleNext, handleChange, values } = props;
+  const {
+    handleNext,
+    handleChange,
+    values: { firstName, lastName, email },
+    formErrors,
+  } = props;
+
+  // Check if all values are not empty or if there are some error
+  const isValid =
+    firstName.length > 0 &&
+    !formErrors.firstName &&
+    lastName.length > 0 &&
+    !formErrors.lastName &&
+    email.length > 0 &&
+    !formErrors.email;
 
   const continueStep = (e) => {
     e.preventDefault();
@@ -49,26 +63,37 @@ const FormUserDetails = (props) => {
         placeholder="Enter Your First Name"
         label="FirstName"
         onChange={handleChange("firstName")}
-        value={values.firstName}
+        value={firstName}
+        // Two !! to make the value boolean
+        error={!!formErrors.firstName}
+        helperText={formErrors.firstName}
+        required
       />
       <br />
       <TextField
         placeholder="Enter Your Last Name"
         label="LastName"
         onChange={handleChange("lastName")}
-        value={values.lastName}
+        value={lastName}
+        error={!!formErrors.lastName}
+        helperText={formErrors.lastName}
+        required
       />
       <br />
       <TextField
         placeholder="Enter Your Email"
         label="Email"
         onChange={handleChange("email")}
-        value={values.email}
+        value={email}
+        error={!!formErrors.email}
+        helperText={formErrors.email}
+        required
       />
       <br />
       <Button
         variant="contained"
         color="primary"
+        disabled={!isValid}
         style={styles.button}
         onClick={continueStep}
       >

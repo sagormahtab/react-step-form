@@ -4,9 +4,46 @@ import { useState } from "react";
 import FormPersonalDetails from "./FormPersonalDetails";
 import Confirm from "./Confirm";
 import Success from "./Success";
+import formValidation from "../Helper/formValidation";
+
+const fieldsValidation = {
+  firstName: {
+    error: "",
+    validate: "text",
+    minLength: 2,
+    maxLength: 20,
+  },
+  lastName: {
+    error: "",
+    validate: "text",
+    minLength: 2,
+    maxLength: 20,
+  },
+  email: {
+    error: "",
+    validate: "email",
+  },
+  occupation: {
+    error: "",
+    validate: "text",
+    minLength: 3,
+  },
+  city: {
+    error: "",
+    validate: "text",
+    minLength: 3,
+    maxLength: 20,
+  },
+  bio: {
+    error: "",
+    validate: "text",
+    minLength: 3,
+  },
+};
 
 const UserForm = () => {
   const [steps, setSteps] = useState(1);
+  const [formErrors, setFormErrors] = useState({});
   const [fields, setFields] = useState({
     firstName: "",
     lastName: "",
@@ -32,6 +69,13 @@ const UserForm = () => {
       ...fields,
       [input]: e.target.value,
     });
+
+    // set errors
+    const error = formValidation(input, e.target.value, fieldsValidation) || "";
+
+    setFormErrors({
+      [input]: error,
+    });
   };
 
   const handleSteps = (step) => {
@@ -42,6 +86,7 @@ const UserForm = () => {
             handleNext={handleNext}
             handleChange={handleChange}
             values={fields}
+            formErrors={formErrors}
           />
         );
       case 2:
@@ -51,6 +96,7 @@ const UserForm = () => {
             handleChange={handleChange}
             handleBack={handleBack}
             values={fields}
+            formErrors={formErrors}
           />
         );
       case 3:

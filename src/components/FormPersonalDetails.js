@@ -22,7 +22,21 @@ const useStyles = makeStyles((theme) => ({
 
 const FormPersonalDetails = (props) => {
   const classes = useStyles();
-  const { handleNext, handleBack, handleChange, values } = props;
+  const {
+    handleNext,
+    handleBack,
+    handleChange,
+    values: { occupation, city, bio },
+    formErrors,
+  } = props;
+
+  const isValid =
+    occupation.length > 0 &&
+    !formErrors.occupation &&
+    city.length > 0 &&
+    !formErrors.city &&
+    bio.length > 0 &&
+    !formErrors.bio;
 
   const continueStep = (e) => {
     e.preventDefault();
@@ -53,21 +67,27 @@ const FormPersonalDetails = (props) => {
         placeholder="Enter Your Occupation"
         label="Occupation"
         onChange={handleChange("occupation")}
-        defaultValue={values.occupation}
+        defaultValue={occupation}
+        error={!!formErrors.occupation}
+        helperText={formErrors.occupation}
       />
       <br />
       <TextField
         placeholder="Enter Your City"
         label="City"
         onChange={handleChange("city")}
-        defaultValue={values.city}
+        defaultValue={city}
+        error={!!formErrors.city}
+        helperText={formErrors.city}
       />
       <br />
       <TextField
         placeholder="Enter Your Bio"
         label="Bio"
         onChange={handleChange("bio")}
-        defaultValue={values.bio}
+        defaultValue={bio}
+        error={!!formErrors.bio}
+        helperText={formErrors.bio}
       />
       <br />
       <Button variant="contained" style={styles.button} onClick={back}>
@@ -76,6 +96,7 @@ const FormPersonalDetails = (props) => {
       <Button
         variant="contained"
         color="primary"
+        disabled={!isValid}
         style={styles.button}
         onClick={continueStep}
       >
